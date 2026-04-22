@@ -1,15 +1,11 @@
-"""
-Activity 3: Join employees with projects and analyze birthdays
-"""
-
 import pandas as pd
 
 
-def j_e_p(
-    employees_df,
-    projects_df,
-    months_df
-):
+def join_employees_projects_months(
+    employees_df: pd.DataFrame,
+    projects_df: pd.DataFrame,
+    months_df: pd.DataFrame
+) -> pd.DataFrame:
     """
     Join employee data with project assignments and month names.
 
@@ -24,17 +20,26 @@ def j_e_p(
     Returns:
         Merged DataFrame with employee info + project + month name
     """
-    # TODO:
-    # - add type hints
-    # - rename function
-    # - implement joins
-    pass
+
+    merged = employees_df.merge(
+        projects_df,
+        on="employee_id",
+        how="inner"
+    )
+
+    merged = merged.merge(
+        months_df,
+        on="birth_month",
+        how="inner"
+    )
+
+    return merged
 
 
-def f_e_m(
-    df,
-    month
-):
+def filter_employees_by_month(
+    df: pd.DataFrame,
+    month: str
+) -> pd.DataFrame:
     """
     Filter employees born in a specific month.
 
@@ -45,8 +50,5 @@ def f_e_m(
     Returns:
         Filtered DataFrame
     """
-    # TODO:
-    # - add type hints
-    # - rename function
-    # - implement filtering
-    pass
+
+    return df[df["month_name"] == month]
