@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - "**"
+  pull_request:           
 
 jobs:
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -25,7 +29,8 @@ jobs:
         run: |
           flake8 . --count --statistics --output-file=flake8-report.txt || true
 
-      - name: Comment on commit
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'   # ← only runs on PRs
         uses: actions/github-script@v7
         with:
           script: |
@@ -36,9 +41,22 @@ jobs:
               ? "✅ No linting issues found. Clean code!"
               : `⚠️ **Linting Issues Found (PEP8):**\n\`\`\`\n${report}\n\`\`\``;
 
-            await github.rest.repos.createCommitComment({
+            await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              commit_sha: context.sha,
+              issue_number: context.issue.number,  // PR number
               body: body
             });
+
+      - name: Write job summary (for push events)
+        if: github.event_name == 'push'            # ← fallback for direct pushes
+        run: |
+          REPORT=$(cat flake8-report.txt)
+          if [ -z "$REPORT" ]; then
+            echo "## ✅ No linting issues found." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ⚠️ Linting Issues (PEP8)" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            cat flake8-report.txt >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
