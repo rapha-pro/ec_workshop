@@ -10,12 +10,12 @@ def test_join_structure(employee_data, project_assignments, months):
     """
     Test that join returns expected columns.
     """
-    result = j_e_p(employee_data, project_assignments, months)
 
     # TODO:
-    # check that "<your_name>" is in the dataframe columns
-    # check that "<your department>" is in the dataframe columns
-    # check that "<your birthmonth>" is in the dataframe columns
+    # check that "birth_month" is a column
+    # check that "<your_name>" is in the merged dataframe
+    # check that "<your department>" is in the merged dataframe
+    # check that "<your birthmonth>" is in the merged dataframe
     # (hint: use result.columns)
 
 
