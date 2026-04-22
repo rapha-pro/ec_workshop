@@ -1,6 +1,6 @@
-# Team Workshop - Pandas + Testing
+# Pytest short Workshop
 
-## Activity: Pandas Joins & Filtering (15 min)
+## Activity: Pandas Joins, Filtering + Pytest (15 min)
 
 ### Goal
 
@@ -41,11 +41,20 @@ Hint: `df[df["<column_name>"] == "name"]`
 
 ### 2. Run Tests 
 ```bash
-> tox
+# powershell
+pytest tests/ -v `
+--html="report_$(Get-Date -Format yyyy-MM-dd).html" `
+--self-contained-html `
+--metadata run_date "$(Get-Date -Format yyyy-MM-dd)"
 
 OR
 
-> pytest
+# bash
+pytest tests/ -v \
+--html=report_$(date +%Y-%m-%d).html \
+--self-contained-html \
+--metadata run_date "$(date +%Y-%m-%d)"
+
 ```
 ---
 

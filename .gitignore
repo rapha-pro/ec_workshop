@@ -16,7 +16,7 @@ ENV/
 .tox/
 .coverage
 htmlcov/
-report.html
+*.html
 assets/
 *.log
 
